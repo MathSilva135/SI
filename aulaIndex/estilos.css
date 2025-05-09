@@ -1,0 +1,18 @@
+.destaque {
+    font-family: cursive;
+    color:color rgb(142, 102, 218)
+}
+
+header{
+    height: 200px;
+
+}
+
+footer{
+    color :rgb(36, 7, 92);
+    justify-content: center;    
+}
+
+.centro{
+    vertical-align: center;
+}

@@ -1,0 +1,40 @@
+    :root{
+        --preto:#000000;
+        --cinza:#999999;
+        --verdeAgua : #00b991;
+    }
+   
+    main .fonteMenor{
+        font-size: small; 
+    }
+
+    .fonteMenor.fonteMenorP {
+        color: var(--preto);
+    }
+
+    .fonteMenor.fonteMenorC {    
+        color: var(--cinza);
+    }
+
+   
+    header .fontes {
+        font-size: 450%;
+    }
+
+    div .paragrafo {
+        font-size: 150%;
+    }
+
+    div.bordas {
+        margin-left: 38px;
+        margin-right: 40%
+    }
+
+    .a:visited {
+        color: var(--verdeAgua);
+    }
+
+    img.imgPequena{
+        width : 40%;
+        text-align : center;
+    }

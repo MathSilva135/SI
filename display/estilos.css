@@ -1,0 +1,33 @@
+*:not(html, body){
+    border: 2px solid rgb(171, 119, 255);
+    box-sizing: border-box;
+}
+
+img{
+    width: 100%;
+}
+
+BODY{
+    margin: 0;
+}
+
+h1{
+    width: calc(100%/4);
+    display: inline-block; 
+}
+
+.t1{
+    background-color: aliceblue;
+    margin-left: calc(100%/8);
+    margin-right: calc(100%/8);
+}
+
+.t2{
+    background-color: rgb(255, 17, 0);
+    
+}
+
+.t3{
+    background-color: rgb(62, 0, 161);
+    
+}
