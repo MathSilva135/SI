@@ -3,10 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="form1.css">
     <title>Document</title>
 </head>
 <body>
+    <form id="frm" method="post" action="salvar.html">
+        <h3> Entrada de Texto</h3>
+        <label for="nomecompleto">Nome :</label>
+        <input class="destaque" type="text" name="nomecompleto" id="nomecompleto">
+        <button type="button" name="btnNome" id="btnNome" onclick="inserir()">Inserir</button>
+    
+    </form>
+    
 
+    <script>
+        function inserir(){
+            var nome = document.getElementById("nomecompleto")
+            alert("Seja bem-vindo : " + nome.value )
+        }
+    </script>
 
 </body>
 </html>
