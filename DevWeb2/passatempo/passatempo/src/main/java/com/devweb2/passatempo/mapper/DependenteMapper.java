@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 public interface DependenteMapper {
 
     // Mapeamento especial:
-    // 1. Pega dependente.getSocio().getId() e coloca em dependenteDTO.setSocioId()
+    // Pega dependente.getSocio().getId() e coloca em dependenteDTO.setSocioId()
     @Mapping(source = "socio.id", target = "socioId")
     DependenteDTO toDTO(Dependente dependente);
 

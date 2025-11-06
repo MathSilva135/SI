@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO padrão para Classe (leitura e escrita).
- * Removemos a lista de 'titulos' para evitar referência circular.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * DTO para Dependente (ARQUIVO NOVO).
- * Inclui campos do pai (Cliente) e o ID do Socio ao qual pertence.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

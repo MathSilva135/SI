@@ -21,17 +21,16 @@ public class RestExceptionHandler {
             ResourceNotFoundException ex,
             HttpServletRequest request
     ) {
-        // 1. Cria o DTO de erro
+        // Cria o DTO de erro
         ErrorResponseDTO errorResponse = new ErrorResponseDTO(
                 ex.getMessage(),
                 HttpStatus.NOT_FOUND.value(),
                 request.getRequestURI()
         );
 
-        // 2. Retorna o ResponseEntity formatado com o DTO de erro
+        // Retorna o ResponseEntity formatado com o DTO de erro
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    // Você pode adicionar outros métodos @ExceptionHandler aqui
-    // para tratar outros tipos de erros (ex: BadRequest, Erros de Validação, etc.)
+
 }

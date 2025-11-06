@@ -12,7 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "classe") // Boa prática adicionar
+@Table(name = "classe")
 public class Classe {
 
     @Id
@@ -21,10 +21,10 @@ public class Classe {
 
     private String nome;
     private Double valor;
-    private Integer prazoDevolucao; // Em dias (Comentário corrigido)
+    private Integer prazoDevolucao; // Em dias
 
     @OneToMany(mappedBy = "classe", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Titulo> titulos = new HashSet<>();
 
-    // TODO: Remover todos os getters, setters e construtores manuais daqui
+
 }

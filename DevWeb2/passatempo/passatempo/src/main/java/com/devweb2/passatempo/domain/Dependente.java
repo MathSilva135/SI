@@ -6,18 +6,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-/**
- * Entidade Dependente.
- * Esta classe herda de Cliente (assim como Socio).
- * Usa a estratégia @PrimaryKeyJoinColumn para se ligar à tabela pai.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true) // Importante para o Lombok lidar corretamente com a herança
+
 @Entity
 @Table(name = "dependente")
-@PrimaryKeyJoinColumn(name = "cliente_id") // Define qual coluna faz a ligação (PK e FK) com a tabela 'cliente'
+@PrimaryKeyJoinColumn(name = "cliente_id")
 public class Dependente extends Cliente {
 
     // Relacionamento: Muitos Dependentes pertencem a UM Socio

@@ -11,6 +11,5 @@ import lombok.AllArgsConstructor;
 public class AtorDTO {
     private Long id;
     private String nome;
-    // Podemos adicionar ou remover campos aqui sem afetar
-    // a entidade do banco de dados.
+
 }

@@ -6,13 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-/**
- * DTO para RETORNAR um Título.
- * Expõe os relacionamentos como DTOs aninhados (ClasseDTO, DiretorDTO, AtorDTO).
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//Classe para recebimento detalhado com os objetos completos.
 public class TituloResponseDTO {
     private Long id;
     private String nome;
