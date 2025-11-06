@@ -1,55 +1,51 @@
 package com.devweb2.passatempo.resources;
 
-import com.devweb2.passatempo.domain.Classe;
-import com.devweb2.passatempo.repository.ClasseRepository;
+import com.devweb2.passatempo.dto.ClasseDTO;
+import com.devweb2.passatempo.service.ClasseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * REFATORADO: Agora usa ClasseService e ClasseDTO.
+ */
 @RestController
 @RequestMapping("/api/classes")
 public class ClasseResource {
 
     @Autowired
-    private ClasseRepository classeRepository;
+    private ClasseService classeService; // Injeta o Service
 
     @GetMapping
-    public List<Classe> listarClasses() {
-        return classeRepository.findAll();
+    public ResponseEntity<List<ClasseDTO>> listarClasses() {
+        List<ClasseDTO> lista = classeService.findAll();
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Classe> buscarPeloId(@PathVariable Long id) {
-        Optional<Classe> classe = classeRepository.findById(id);
-        return classe.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ClasseDTO> buscarPeloId(@PathVariable Long id) {
+        ClasseDTO dto = classeService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public Classe criarClasse(@RequestBody Classe classe) {
-        return classeRepository.save(classe);
+    public ResponseEntity<ClasseDTO> criarClasse(@RequestBody ClasseDTO classeDTO) {
+        ClasseDTO novoDto = classeService.create(classeDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Classe> atualizarClasse(@PathVariable Long id, @RequestBody Classe classeDetalhes) {
-        return classeRepository.findById(id)
-                .map(classe -> {
-                    classe.setNome(classeDetalhes.getNome());
-                    classe.setValor(classeDetalhes.getValor());
-                    classe.setPrazoDevolucao(classeDetalhes.getPrazoDevolucao());
-                    Classe classeAtualizada = classeRepository.save(classe);
-                    return ResponseEntity.ok(classeAtualizada);
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ClasseDTO> atualizarClasse(@PathVariable Long id, @RequestBody ClasseDTO classeDTO) {
+        ClasseDTO dtoAtualizado = classeService.update(id, classeDTO);
+        return ResponseEntity.ok(dtoAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarClasse(@PathVariable Long id) {
-        return classeRepository.findById(id)
-                .map(classe -> {
-                    classeRepository.delete(classe);
-                    return ResponseEntity.noContent().<Void>build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+        classeService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

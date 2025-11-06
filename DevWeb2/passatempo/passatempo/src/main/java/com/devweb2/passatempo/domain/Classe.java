@@ -1,11 +1,18 @@
 package com.devweb2.passatempo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "classe") // Boa prática adicionar
 public class Classe {
 
     @Id
@@ -14,42 +21,10 @@ public class Classe {
 
     private String nome;
     private Double valor;
-    private Integer prazoDevolucao; // Em dias
+    private Integer prazoDevolucao; // Em dias (Comentário corrigido)
 
-    // Construtores, Getters e Setters
+    @OneToMany(mappedBy = "classe", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Titulo> titulos = new HashSet<>();
 
-    public Classe() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
-    public Integer getPrazoDevolucao() {
-        return prazoDevolucao;
-    }
-
-    public void setPrazoDevolucao(Integer prazoDevolucao) {
-        this.prazoDevolucao = prazoDevolucao;
-    }
+    // TODO: Remover todos os getters, setters e construtores manuais daqui
 }

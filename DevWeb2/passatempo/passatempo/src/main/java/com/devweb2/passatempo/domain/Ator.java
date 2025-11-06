@@ -4,8 +4,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+// Anotações do Lombok
+@Data // Cria Getters, Setters, equals, hashCode e toString
+@NoArgsConstructor // Cria um construtor vazio
+@AllArgsConstructor // Cria um construtor com todos os campos
 @Entity
+@Table(name = "ator") // Boa prática especificar o nome da tabela
 public class Ator {
 
     @Id
@@ -14,24 +23,6 @@ public class Ator {
 
     private String nome;
 
-    // Construtores, Getters e Setters
-
-    public Ator() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
+    // Não precisamos mais de getters e setters manuais!
+    // O Lombok cuida disso.
 }

@@ -1,53 +1,51 @@
 package com.devweb2.passatempo.resources;
 
-import com.devweb2.passatempo.domain.Diretor;
-import com.devweb2.passatempo.repository.DiretorRepository;
+import com.devweb2.passatempo.dto.DiretorDTO;
+import com.devweb2.passatempo.service.DiretorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * REFATORADO: Agora usa DiretorService e DiretorDTO.
+ */
 @RestController
 @RequestMapping("/api/diretores")
 public class DiretorResource {
 
     @Autowired
-    private DiretorRepository diretorRepository;
+    private DiretorService diretorService; // Injeta o Service
 
     @GetMapping
-    public List<Diretor> listarDiretores() {
-        return diretorRepository.findAll();
+    public ResponseEntity<List<DiretorDTO>> listarDiretores() {
+        List<DiretorDTO> lista = diretorService.findAll();
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Diretor> buscarPeloId(@PathVariable Long id) {
-        Optional<Diretor> diretor = diretorRepository.findById(id);
-        return diretor.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<DiretorDTO> buscarPeloId(@PathVariable Long id) {
+        DiretorDTO dto = diretorService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public Diretor criarDiretor(@RequestBody Diretor diretor) {
-        return diretorRepository.save(diretor);
+    public ResponseEntity<DiretorDTO> criarDiretor(@RequestBody DiretorDTO diretorDTO) {
+        DiretorDTO novoDto = diretorService.create(diretorDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Diretor> atualizarDiretor(@PathVariable Long id, @RequestBody Diretor diretorDetalhes) {
-        return diretorRepository.findById(id)
-                .map(diretor -> {
-                    diretor.setNome(diretorDetalhes.getNome());
-                    Diretor diretorAtualizado = diretorRepository.save(diretor);
-                    return ResponseEntity.ok(diretorAtualizado);
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<DiretorDTO> atualizarDiretor(@PathVariable Long id, @RequestBody DiretorDTO diretorDTO) {
+        DiretorDTO dtoAtualizado = diretorService.update(id, diretorDTO);
+        return ResponseEntity.ok(dtoAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarDiretor(@PathVariable Long id) {
-        return diretorRepository.findById(id)
-                .map(diretor -> {
-                    diretorRepository.delete(diretor);
-                    return ResponseEntity.noContent().<Void>build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+        diretorService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

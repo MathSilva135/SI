@@ -1,53 +1,55 @@
 package com.devweb2.passatempo.resources;
 
-import com.devweb2.passatempo.domain.Ator;
-import com.devweb2.passatempo.repository.AtorRepository;
+import com.devweb2.passatempo.dto.AtorDTO;
+import com.devweb2.passatempo.service.AtorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/atores")
 public class AtorResource {
 
+    // MUDANÇA: Injeta o AtorService, não o AtorRepository
     @Autowired
-    private AtorRepository atorRepository;
+    private AtorService atorService;
 
     @GetMapping
-    public List<Ator> listarAtores() {
-        return atorRepository.findAll();
+    public ResponseEntity<List<AtorDTO>> listarAtores() {
+        // A lógica de negócio foi para o Service
+        List<AtorDTO> lista = atorService.findAll();
+        return ResponseEntity.ok(lista);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Ator> buscarPeloId(@PathVariable Long id) {
-        Optional<Ator> ator = atorRepository.findById(id);
-        return ator.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<AtorDTO> buscarPeloId(@PathVariable Long id) {
+        // O Service agora cuida de tudo.
+        // Se não encontrar, ele lançará a ResourceNotFoundException,
+        // que será capturada automaticamente pelo RestExceptionHandler.
+        AtorDTO dto = atorService.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public Ator criarAtor(@RequestBody Ator ator) {
-        return atorRepository.save(ator);
+    public ResponseEntity<AtorDTO> criarAtor(@RequestBody AtorDTO atorDTO) {
+        AtorDTO novoDto = atorService.create(atorDTO);
+        // Retorna o status 201 Created (melhor prática)
+        return ResponseEntity.status(HttpStatus.CREATED).body(novoDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ator> atualizarAtor(@PathVariable Long id, @RequestBody Ator atorDetalhes) {
-        return atorRepository.findById(id)
-                .map(ator -> {
-                    ator.setNome(atorDetalhes.getNome());
-                    Ator atorAtualizado = atorRepository.save(ator);
-                    return ResponseEntity.ok(atorAtualizado);
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<AtorDTO> atualizarAtor(@PathVariable Long id, @RequestBody AtorDTO atorDTO) {
+        AtorDTO dtoAtualizado = atorService.update(id, atorDTO);
+        return ResponseEntity.ok(dtoAtualizado);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarAtor(@PathVariable Long id) {
-        return atorRepository.findById(id)
-                .map(ator -> {
-                    atorRepository.delete(ator);
-                    return ResponseEntity.noContent().<Void>build();
-                }).orElseGet(() -> ResponseEntity.notFound().build());
+        atorService.delete(id);
+        // Retorna 204 No Content (melhor prática)
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,77 +1,52 @@
 package com.devweb2.passatempo.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Table(name = "titulo")
 public class Titulo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String nome;
-    private int ano;
+    private String ano;
+
+    @Column(columnDefinition = "TEXT")
     private String sinopse;
-    private ClasseDTO classeDTO;
-    private DiretorDTO diretorDTO;
-    private List <AtorDTO> atorDTO;
+    private String categoria;
 
-    public Long getId() {
-        return id;
-    }
+    // Relacionamento: Muitos Títulos para UMA Classe
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "classe_id", nullable = false)
+    private Classe classe;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    // Relacionamento: Muitos Títulos para UM Diretor
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diretor_id", nullable = false)
+    private Diretor diretor;
 
-    public String getNome() {
-        return nome;
-    }
+    // Relacionamento: Um Título para Muitos Itens
+    @OneToMany(mappedBy = "titulo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Item> itens = new HashSet<>();
 
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public int getAno() {
-        return ano;
-    }
-
-    public void setAno(int ano) {
-        this.ano = ano;
-    }
-
-    public String getSinopse() {
-        return sinopse;
-    }
-
-    public void setSinopse(String sinopse) {
-        this.sinopse = sinopse;
-    }
-
-    public ClasseDTO getClasseDTO() {
-        return classeDTO;
-    }
-
-    public void setClasseDTO(ClasseDTO classeDTO) {
-        this.classeDTO = classeDTO;
-    }
-
-    public DiretorDTO getDiretorDTO() {
-        return diretorDTO;
-    }
-
-    public void setDiretorDTO(DiretorDTO diretorDTO) {
-        this.diretorDTO = diretorDTO;
-    }
-
-    public List<AtorDTO> getAtorDTO() {
-        return atorDTO;
-    }
-
-    public void setAtorDTO(List<AtorDTO> atorDTO) {
-        this.atorDTO = atorDTO;
-    }
+    // Relacionamento: Muitos Títulos para Muitos Atores
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "titulo_ator",
+            joinColumns = @JoinColumn(name = "titulo_id"),
+            inverseJoinColumns = @JoinColumn(name = "ator_id")
+    )
+    private Set<Ator> atores = new HashSet<>();
 }
