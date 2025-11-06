@@ -8,6 +8,8 @@ import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -71,10 +73,19 @@ public class AtorService {
      */
     @Transactional
     public void delete(Long id) {
-        Ator ator = findByIdOrThrow(id); // Verifica se existe
-        atorRepository.delete(ator);
-    }
+        Ator ator = findByIdOrThrow(id);
+        try {
 
+            atorRepository.delete(ator);
+            atorRepository.flush();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível excluir o ator com ID " + id + ". " +
+                            "Ele está referênciado em um ou mais títulos."
+            );
+        }
+    }
     /**
      * Método auxiliar privado para buscar um Ator ou lançar exceção.
      * Isso evita repetição de código (DRY - Don't Repeat Yourself).

@@ -23,7 +23,7 @@ public class Classe {
     private Double valor;
     private Integer prazoDevolucao; // Em dias
 
-    @OneToMany(mappedBy = "classe", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "classe")
     private Set<Titulo> titulos = new HashSet<>();
 
 

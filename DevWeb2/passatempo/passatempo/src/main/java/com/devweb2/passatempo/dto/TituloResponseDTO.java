@@ -15,6 +15,7 @@ public class TituloResponseDTO {
     private Long id;
     private String nome;
     private String ano;
+    private String categoria;
     private String sinopse;
     private ClasseDTO classe; // DTO aninhado
     private DiretorDTO diretor; // DTO aninhado

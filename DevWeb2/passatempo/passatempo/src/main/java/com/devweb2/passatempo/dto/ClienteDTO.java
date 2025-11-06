@@ -1,32 +1,27 @@
 package com.devweb2.passatempo.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
-/**
- * DTO para Socio.
- * Inclui os campos da classe pai (Cliente) e os campos próprios.
- */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SocioDTO {
-
-    // Campos herdados de Cliente
+public class ClienteDTO {
     private Long id;
-    private String numInscricao;
     private String nome;
+    private Integer numInscricao;
     private LocalDate dtNascimento;
     private String sexo;
     private Boolean estahAtivo;
-
-    // Campos próprios de Socio
     private String cpf;
     private String endereco;
     private String tel;
 
-    // Não incluímos a lista de dependentes aqui para evitar loops.
+    // --- Relacionamentos (usando DTO de Resumo) ---
+    private ClienteResumoDTO socio;
+    private List<ClienteResumoDTO> dependentes;
 }

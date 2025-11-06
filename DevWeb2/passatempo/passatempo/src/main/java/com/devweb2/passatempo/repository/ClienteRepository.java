@@ -12,8 +12,4 @@ import java.util.Optional;
  */
 @Repository
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
-
-    // Método de busca customizado que o Spring Data JPA implementará para nós
-    // Útil para buscar um cliente pelo número de inscrição, sem saber se é Sócio ou Dependente.
-    Optional<Cliente> findByNumInscricao(String numInscricao);
 }

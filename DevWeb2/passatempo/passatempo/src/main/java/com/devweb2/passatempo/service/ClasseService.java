@@ -8,6 +8,8 @@ import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +60,17 @@ public class ClasseService {
     @Transactional
     public void delete(Long id) {
         Classe classe = findByIdOrThrow(id);
-        classeRepository.delete(classe);
+        try {
+
+            classeRepository.delete(classe);
+            classeRepository.flush();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível excluir a classe com ID " + id + ". " +
+                            "Ela está referênciada em um ou mais títulos."
+            );
+        }
     }
 
     private Classe findByIdOrThrow(Long id) {

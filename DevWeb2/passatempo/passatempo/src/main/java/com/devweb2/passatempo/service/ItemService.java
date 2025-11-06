@@ -10,6 +10,8 @@ import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -49,8 +51,20 @@ public class ItemService {
         item.setId(null);
         item.setTitulo(titulo); // Associa o Título encontrado
 
-        item = itemRepository.save(item);
-        return itemMapper.toDTO(item);
+
+        try {
+
+            item = itemRepository.save(item);
+            itemRepository.flush();
+            return itemMapper.toDTO(item);
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível cadastrar o item " +
+                            "pois já existe um item com número de Série " + item.getNumSerie()
+            );
+        }
+
     }
 
     @Transactional
@@ -74,7 +88,18 @@ public class ItemService {
     @Transactional
     public void delete(Long id) {
         Item item = findByIdOrThrow(id);
-        itemRepository.delete(item);
+
+        try {
+
+            itemRepository.delete(item);
+            itemRepository.flush();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível excluir o item de número de Série " + item.getNumSerie() + ". " +
+                            "Ele está referênciado em uma ou mais locações."
+            );
+        }
     }
 
     private Item findByIdOrThrow(Long id) {

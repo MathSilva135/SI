@@ -8,6 +8,8 @@ import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,7 +55,18 @@ public class DiretorService {
     @Transactional
     public void delete(Long id) {
         Diretor diretor = findByIdOrThrow(id);
-        diretorRepository.delete(diretor);
+
+        try {
+
+            diretorRepository.delete(diretor);
+            diretorRepository.flush();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível excluir o diretor com ID " + id + ". " +
+                            "Ele está referênciado em um ou mais títulos."
+            );
+        }
     }
 
     private Diretor findByIdOrThrow(Long id) {
