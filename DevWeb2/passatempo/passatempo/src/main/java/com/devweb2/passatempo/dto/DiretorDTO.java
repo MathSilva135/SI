@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-/**
- * DTO padrão para Diretor (leitura e escrita).
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

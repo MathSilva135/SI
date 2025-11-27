@@ -6,13 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-/**
- * DTO para CRIAR um novo Título.
- * Recebe apenas os IDs dos relacionamentos, que o Service irá processar.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+//Classe pra envio de dados simples, apenas id, para criação do Titulo.
 public class TituloCreateDTO {
     private String nome;
     private String ano;

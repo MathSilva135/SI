@@ -6,10 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
-/**
- * DTO padrão para Item (leitura e escrita).
- * Usamos 'tituloId' para representar o relacionamento com Titulo.
- */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

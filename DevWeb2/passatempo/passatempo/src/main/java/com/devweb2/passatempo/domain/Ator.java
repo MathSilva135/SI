@@ -13,8 +13,9 @@ import lombok.NoArgsConstructor;
 @Data // Cria Getters, Setters, equals, hashCode e toString
 @NoArgsConstructor // Cria um construtor vazio
 @AllArgsConstructor // Cria um construtor com todos os campos
+
 @Entity
-@Table(name = "ator") // Boa prática especificar o nome da tabela
+@Table(name = "ator")
 public class Ator {
 
     @Id
@@ -23,6 +24,5 @@ public class Ator {
 
     private String nome;
 
-    // Não precisamos mais de getters e setters manuais!
-    // O Lombok cuida disso.
+
 }

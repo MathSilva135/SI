@@ -8,7 +8,7 @@ public class ErrorResponseDTO {
     private String message;
     private LocalDateTime timestamp;
     private Integer status;
-    private String path; // Opcional, mas bom ter
+    private String path;
 
     // Construtores
     public ErrorResponseDTO() {

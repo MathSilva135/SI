@@ -21,7 +21,7 @@ public class Item {
     @Column(nullable = false, unique = true)
     private String numSerie;
     private LocalDate dtAquisicao;
-    private String tipoItem; // (fita, DVD ou BlueRay)
+    private String tipoItem;
 
     // Relacionamento: Muitos Itens para UM Título
     @ManyToOne(fetch = FetchType.LAZY)
