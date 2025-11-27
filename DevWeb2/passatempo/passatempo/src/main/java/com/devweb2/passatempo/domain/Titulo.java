@@ -38,7 +38,7 @@ public class Titulo {
     private Diretor diretor;
 
     // Relacionamento: Um Título para Muitos Itens
-    @OneToMany(mappedBy = "titulo", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "titulo")
     private Set<Item> itens = new HashSet<>();
 
     // Relacionamento: Muitos Títulos para Muitos Atores

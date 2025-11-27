@@ -13,8 +13,11 @@ import com.devweb2.passatempo.repository.DiretorRepository;
 import com.devweb2.passatempo.repository.TituloRepository;
 import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +40,7 @@ public class TituloService {
 
     @Transactional(readOnly = true)
     public List<TituloResponseDTO> findAll() {
-        return tituloRepository.findAll().stream()
+        return tituloRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
                 .map(tituloMapper::toResponseDTO)
                 .collect(Collectors.toList());
     }
@@ -88,7 +91,18 @@ public class TituloService {
     @Transactional
     public void delete(Long id) {
         Titulo titulo = findByIdOrThrow(id);
-        tituloRepository.delete(titulo);
+
+        try {
+
+            tituloRepository.delete(titulo);
+            tituloRepository.flush();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível excluir o titulo com ID " + id + ". " +
+                            "Ele está referênciado em um ou mais itens."
+            );
+        }
     }
 
     private Titulo findByIdOrThrow(Long id) {

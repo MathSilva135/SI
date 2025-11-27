@@ -1,12 +1,16 @@
 package com.devweb2.passatempo.resources.exceptions;
 
 import com.devweb2.passatempo.dto.ErrorResponseDTO;
+
+
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
 import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
 
 // Esta classe é o "Gerente de Exceções" central.
 // A anotação @ControllerAdvice faz com que ela "observe" todos os Controllers.
@@ -32,6 +36,20 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
-    // Você pode adicionar outros métodos @ExceptionHandler aqui
-    // para tratar outros tipos de erros (ex: BadRequest, Erros de Validação, etc.)
+
+    @ExceptionHandler(DataIntegrityException.class)
+    public ResponseEntity<ErrorResponseDTO> dataIntegrityViolation(DataIntegrityException ex, HttpServletRequest request) {
+
+        // Usamos 400 BAD_REQUEST (ou 409 CONFLICT)
+        HttpStatus status = HttpStatus.BAD_REQUEST; // 400
+
+        ErrorResponseDTO errorResponse = new ErrorResponseDTO(
+                ex.getMessage(), // A mensagem amigável que definimos no Service
+                status.value(),
+                request.getRequestURI()
+        );
+
+        return ResponseEntity.status(status).body(errorResponse);
+    }
+
 }

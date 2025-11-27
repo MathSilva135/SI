@@ -8,8 +8,11 @@ import com.devweb2.passatempo.repository.ItemRepository;
 import com.devweb2.passatempo.repository.TituloRepository;
 import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.devweb2.passatempo.service.exceptions.DataIntegrityException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +31,7 @@ public class ItemService {
 
     @Transactional(readOnly = true)
     public List<ItemDTO> findAll() {
-        return itemRepository.findAll().stream()
+        return itemRepository.findAll(Sort.by(Sort.Direction.DESC, "id")).stream()
                 .map(itemMapper::toDTO)
                 .collect(Collectors.toList());
     }
@@ -74,7 +77,18 @@ public class ItemService {
     @Transactional
     public void delete(Long id) {
         Item item = findByIdOrThrow(id);
-        itemRepository.delete(item);
+
+        try {
+
+            itemRepository.delete(item);
+            itemRepository.flush();
+
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityException(
+                    "Não é possível excluir o item com ID " + id + ". " +
+                            "Ele está referênciado em uma ou mais locações."
+            );
+        }
     }
 
     private Item findByIdOrThrow(Long id) {

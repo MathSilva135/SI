@@ -21,6 +21,6 @@ public class Diretor {
 
     private String nome;
 
-    @OneToMany(mappedBy = "diretor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "diretor")
     private Set<Titulo> titulos = new HashSet<>();
 }
