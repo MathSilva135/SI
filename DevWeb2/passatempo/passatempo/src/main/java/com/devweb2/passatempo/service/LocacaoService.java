@@ -142,7 +142,8 @@ public class LocacaoService {
     private void validarDatas(Locacao locacao) {
         // Restrição: A data de devolução prevista tem de ser maior do que a data de locação.
         if (locacao.getDtDevolucaoPrevista() != null &&
-                !locacao.getDtDevolucaoPrevista().isAfter(locacao.getDtLocacao())) {
+                !locacao.getDtDevolucaoPrevista().isAfter(locacao.getDtLocacao()) &&
+        !locacao.getDtDevolucaoPrevista().isEqual(locacao.getDtLocacao())) {
             throw new DataIntegrityException("Data de devolução prevista deve ser posterior à data de locação.");
         }
 
