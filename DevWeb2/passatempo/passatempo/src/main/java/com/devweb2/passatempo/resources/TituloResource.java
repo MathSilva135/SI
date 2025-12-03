@@ -50,4 +50,10 @@ public class TituloResource {
         tituloService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}/disponibilidade")
+    public ResponseEntity<Long> verificarDisponibilidade(@PathVariable Long id) {
+        Long quantidade = tituloService.contarItensDisponiveis(id);
+        return ResponseEntity.ok(quantidade);
+    }
 }

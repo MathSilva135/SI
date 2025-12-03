@@ -7,10 +7,7 @@ import com.devweb2.passatempo.domain.Titulo;
 import com.devweb2.passatempo.dto.TituloCreateDTO;
 import com.devweb2.passatempo.dto.TituloResponseDTO;
 import com.devweb2.passatempo.mapper.TituloMapper;
-import com.devweb2.passatempo.repository.AtorRepository;
-import com.devweb2.passatempo.repository.ClasseRepository;
-import com.devweb2.passatempo.repository.DiretorRepository;
-import com.devweb2.passatempo.repository.TituloRepository;
+import com.devweb2.passatempo.repository.*;
 import com.devweb2.passatempo.service.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -29,6 +26,8 @@ public class TituloService {
 
     @Autowired
     private TituloRepository tituloRepository;
+    @Autowired
+    private ItemRepository itemRepository;
     @Autowired
     private ClasseRepository classeRepository; // Dependência para Classe
     @Autowired
@@ -134,5 +133,16 @@ public class TituloService {
         titulo.setClasse(classe);
         titulo.setDiretor(diretor);
         titulo.setAtores(atores);
+    }
+
+    @Transactional(readOnly = true)
+    public Long contarItensDisponiveis(Long tituloId) {
+        // 1. Verifica se o título existe (opcional, mas recomendado para dar 404 se o titulo não existir)
+        if (!tituloRepository.existsById(tituloId)) {
+            throw new ResourceNotFoundException("Título não encontrado com o ID: " + tituloId);
+        }
+
+        // 2. Chama a query otimizada do repositório
+        return itemRepository.contarItensDisponiveisPorTitulo(tituloId);
     }
 }
